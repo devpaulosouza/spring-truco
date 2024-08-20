@@ -48,6 +48,8 @@ public class GameService {
 
         player.setId(UUID.randomUUID());
 
+        room.getPlayers().add(player);
+
         return player;
     }
 
