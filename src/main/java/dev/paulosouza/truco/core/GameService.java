@@ -38,7 +38,7 @@ public class GameService {
                 .findFirst()
                 .orElseThrow();
 
-        if (!this.acceptionNewPlayers(room)) {
+        if (!this.acceptingNewPlayers(room)) {
             throw new TrucoExcpetion("Room is full of players");
         }
 
@@ -51,7 +51,7 @@ public class GameService {
         return player;
     }
 
-    private synchronized boolean acceptionNewPlayers(Room room) {
+    private synchronized boolean acceptingNewPlayers(Room room) {
         return room.getPlayers().size() <= 4;
     }
 
