@@ -1,27 +1,21 @@
-package dev.paulosouza.truco.core;
+package dev.paulosouza.truco.utils;
 
 import dev.paulosouza.truco.model.Card;
 import dev.paulosouza.truco.model.Deck;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
-class DeckServiceTest {
-
-    @InjectMocks
-    private DeckService service;
+class DeckUtilsTest {
 
     @Test
     void create() {
         // given
 
         // when
-        Deck deck = this.service.create();
+        Deck deck = DeckUtils.create();
 
         // then
         Assertions.assertNotNull(deck);

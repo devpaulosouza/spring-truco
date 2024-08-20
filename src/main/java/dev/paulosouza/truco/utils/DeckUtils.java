@@ -1,18 +1,19 @@
-package dev.paulosouza.truco.core;
+package dev.paulosouza.truco.utils;
 
+import dev.paulosouza.truco.core.RandomComparator;
 import dev.paulosouza.truco.model.Card;
 import dev.paulosouza.truco.model.Deck;
-import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
-public class DeckService {
+public class DeckUtils {
 
-    public Deck create() {
+    private DeckUtils() {
+
+    }
+
+    public static Deck create() {
         Deck deck = new Deck();
         List<Card> cards = new ArrayList<>();
 
@@ -22,17 +23,21 @@ public class DeckService {
             }
         }
 
-        deck.setCards(this.shuffle(cards));
+        deck.setCards(DeckUtils.shuffle(cards));
         deck.setId(UUID.randomUUID());
 
         return deck;
     }
 
-    private List<Card> shuffle(List<Card> deck) {
+    public static Card pick(Deck deck) {
+        return deck.getCards().removeFirst();
+    }
+
+    private static Deque<Card> shuffle(List<Card> deck) {
         return deck
                 .stream()
                 .sorted(new RandomComparator<>())
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
 }

@@ -2,6 +2,8 @@ package dev.paulosouza.truco.model;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -13,6 +15,6 @@ public class Player {
 
     private int index;
 
-    private Hand hand;
+    private List<Card> cards = new ArrayList<>();
 
 }

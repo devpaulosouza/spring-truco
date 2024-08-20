@@ -3,6 +3,7 @@ package dev.paulosouza.truco.core;
 import dev.paulosouza.truco.exception.TrucoExcpetion;
 import dev.paulosouza.truco.model.Player;
 import dev.paulosouza.truco.model.Room;
+import dev.paulosouza.truco.utils.DeckUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -15,15 +16,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class GameService {
 
-    private final DeckService deckService;
-
     private static final List<Room> rooms = new ArrayList<>();
 
     public Room init() {
         Room room = new Room();
 
         room.setId(UUID.randomUUID());
-        room.setDeck(this.deckService.create());
+        room.setDeck(DeckUtils.create());
         room.setPlayers(new ArrayList<>());
 
         GameService.rooms.add(room);
@@ -60,6 +59,13 @@ public class GameService {
         }
 
         room.setGameRunning(true);
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < room.getPlayers().size(); j++) {
+                room.getPlayers().get(j).getCards().add(DeckUtils.pick(room.getDeck()));
+            }
+        }
+
     }
 
     public Room getRoom(UUID roomId) {
