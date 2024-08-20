@@ -9,6 +9,8 @@ public class Player {
 
     private UUID id;
 
+    private String name;
+
     private int index;
 
     private Hand hand;
