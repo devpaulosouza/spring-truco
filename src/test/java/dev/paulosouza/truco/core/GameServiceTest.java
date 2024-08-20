@@ -125,6 +125,23 @@ class GameServiceTest {
         }
     }
 
+    @Test
+    void startGameIsAlreadyRunningException() {
+        // given
+        Room room = this.service.init();
+        UUID roomId = room.getId();
+
+        this.service.join(roomId, createPlayer());
+        this.service.join(roomId, createPlayer());
+        this.service.start(roomId);
+
+        // when
+        TrucoExcpetion exception = Assertions.assertThrows(TrucoExcpetion.class, () -> this.service.start(roomId));
+
+        // then
+        Assertions.assertNotNull(exception);
+    }
+
     private Player createPlayer() {
         return new Player();
     }

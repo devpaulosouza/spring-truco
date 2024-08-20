@@ -16,4 +16,8 @@ public class Room {
 
     private boolean isGameRunning;
 
+    private short round = 0;
+
+    private short startPlayer;
+
 }

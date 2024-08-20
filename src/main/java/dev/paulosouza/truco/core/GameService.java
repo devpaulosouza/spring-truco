@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -59,7 +60,13 @@ public class GameService {
             throw new TrucoExcpetion("It is only possible to start with 2 or 4 players");
         }
 
+        if (room.isGameRunning()) {
+            throw new TrucoExcpetion("Game is already running");
+        }
+
         room.setGameRunning(true);
+        room.setRound((short) (room.getRound() + 1));
+        room.setStartPlayer((short) new SecureRandom().nextInt(0, room.getPlayers().size()));
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < room.getPlayers().size(); j++) {
