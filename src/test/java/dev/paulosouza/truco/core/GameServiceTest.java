@@ -1,5 +1,6 @@
 package dev.paulosouza.truco.core;
 
+import dev.paulosouza.truco.exception.TrucoExcpetion;
 import dev.paulosouza.truco.model.Deck;
 import dev.paulosouza.truco.model.Player;
 import dev.paulosouza.truco.model.Room;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -51,14 +51,41 @@ class GameServiceTest {
         List<Player> response = new ArrayList<>();
 
         // when
-        response.add(this.service.join(roomId, new Player()));
-        response.add(this.service.join(roomId, new Player()));
-        response.add(this.service.join(roomId, new Player()));
-        response.add(this.service.join(roomId, new Player()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
 
         // then
         Assertions.assertEquals(4, response.size());
         response.stream().map(Player::getId).forEach(Assertions::assertNotNull);
+    }
+
+    @Test
+    void joinRoomFullOfPlayersException() {
+        // given
+        Room room = this.service.init();
+        UUID roomId = room.getId();
+
+        List<Player> response = new ArrayList<>();
+
+        // when
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+
+        Player excedingPlayer = createPlayer();
+
+        TrucoExcpetion exception = Assertions.assertThrows(TrucoExcpetion.class, () -> this.service.join(roomId, excedingPlayer));
+
+        // then
+        Assertions.assertNotNull(exception);
+        Assertions.assertEquals(4, response.size());
+    }
+
+    private Player createPlayer() {
+        return new Player();
     }
 
 }
