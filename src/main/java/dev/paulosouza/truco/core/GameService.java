@@ -52,7 +52,7 @@ public class GameService {
     }
 
     private synchronized boolean acceptingNewPlayers(Room room) {
-        return room.getPlayers().size() <= 4;
+        return room.getPlayers().size() < 4;
     }
 
 }
