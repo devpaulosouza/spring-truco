@@ -69,11 +69,12 @@ class GameServiceTest {
 
         List<Player> response = new ArrayList<>();
 
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+
         // when
-        response.add(this.service.join(roomId, createPlayer()));
-        response.add(this.service.join(roomId, createPlayer()));
-        response.add(this.service.join(roomId, createPlayer()));
-        response.add(this.service.join(roomId, createPlayer()));
 
         Player excedingPlayer = createPlayer();
 
@@ -82,6 +83,45 @@ class GameServiceTest {
         // then
         Assertions.assertNotNull(exception);
         Assertions.assertEquals(4, response.size());
+    }
+
+    @Test
+    void joinWhenGameIsRunningException() {
+        // given
+        Room room = this.service.init();
+        UUID roomId = room.getId();
+
+        List<Player> response = new ArrayList<>();
+
+        response.add(this.service.join(roomId, createPlayer()));
+        response.add(this.service.join(roomId, createPlayer()));
+
+        this.service.start(roomId);
+
+        // when
+        Player excedingPlayer = createPlayer();
+
+        TrucoExcpetion exception = Assertions.assertThrows(TrucoExcpetion.class, () -> this.service.join(roomId, excedingPlayer));
+
+        // then
+        Assertions.assertNotNull(exception);
+        Assertions.assertEquals(2, response.size());
+    }
+
+    @Test
+    void startSuccessfulyy() {
+        // given
+        Room room = this.service.init();
+        UUID roomId = room.getId();
+
+        this.service.join(roomId, createPlayer());
+        this.service.join(roomId, createPlayer());
+
+        // when
+        this.service.start(roomId);
+
+        // then
+        Assertions.assertTrue(room.isGameRunning());
     }
 
     private Player createPlayer() {

@@ -14,4 +14,6 @@ public class Room {
 
     private Deck deck;
 
+    private boolean isGameRunning;
+
 }

@@ -32,14 +32,13 @@ public class GameService {
     }
 
     public Player join(UUID roomId, Player request) {
-        Room room = GameService.rooms
-                .stream()
-                .filter(r -> r.getId().equals(roomId))
-                .findFirst()
-                .orElseThrow();
+        Room room = getRoom(roomId);
 
-        if (!this.acceptingNewPlayers(room)) {
+        if (!this.isAcceptingNewPlayers(room)) {
             throw new TrucoExcpetion("Room is full of players");
+        }
+        if (room.isGameRunning()) {
+            throw new TrucoExcpetion("Game is already running");
         }
 
         Player player = new Player();
@@ -53,8 +52,30 @@ public class GameService {
         return player;
     }
 
-    private synchronized boolean acceptingNewPlayers(Room room) {
+    public void start(UUID roomId) {
+        Room room = this.getRoom(roomId);
+
+        if (!this.isPlayersCountValid(room)) {
+            throw new TrucoExcpetion("It is only possible to start with 2 or 4 players");
+        }
+
+        room.setGameRunning(true);
+    }
+
+    public Room getRoom(UUID roomId) {
+        return GameService.rooms
+                .stream()
+                .filter(r -> r.getId().equals(roomId))
+                .findFirst()
+                .orElseThrow();
+    }
+
+    private synchronized boolean isAcceptingNewPlayers(Room room) {
         return room.getPlayers().size() < 4;
+    }
+
+    private synchronized boolean isPlayersCountValid(Room room) {
+        return room.getPlayers().size() == 2 || room.getPlayers().size() == 4;
     }
 
 }
