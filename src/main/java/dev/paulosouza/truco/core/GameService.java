@@ -31,7 +31,7 @@ public class GameService {
         return room;
     }
 
-    public Player join(UUID roomId, Player request) {
+    public synchronized Player join(UUID roomId, Player request) {
         Room room = getRoom(roomId);
 
         if (!this.isAcceptingNewPlayers(room)) {
@@ -70,11 +70,11 @@ public class GameService {
                 .orElseThrow();
     }
 
-    private synchronized boolean isAcceptingNewPlayers(Room room) {
+    private boolean isAcceptingNewPlayers(Room room) {
         return room.getPlayers().size() < 4;
     }
 
-    private synchronized boolean isPlayersCountValid(Room room) {
+    private boolean isPlayersCountValid(Room room) {
         return room.getPlayers().size() == 2 || room.getPlayers().size() == 4;
     }
 
