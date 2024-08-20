@@ -48,7 +48,13 @@ class GameServiceTest {
 
         // then
         Assertions.assertEquals(4, response.size());
-        response.stream().map(Player::getId).forEach(Assertions::assertNotNull);
+
+        for (int i = 0; i < response.size(); i++) {
+            Player player = response.get(i);
+
+            Assertions.assertNotNull(player.getId());
+            Assertions.assertEquals(i, player.getIndex());
+        }
     }
 
     @Test

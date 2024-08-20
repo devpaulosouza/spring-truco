@@ -45,6 +45,7 @@ public class GameService {
         BeanUtils.copyProperties(request, player);
 
         player.setId(UUID.randomUUID());
+        player.setIndex(room.getPlayers().size());
 
         room.getPlayers().add(player);
 
